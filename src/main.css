@@ -74,7 +74,7 @@ sup, sub {
     align-self: center;
 }
 
-.key:active {
+.active {
     transform: translateY(3px);
     background: #333;
     box-shadow: 0 1px 0 #000;
