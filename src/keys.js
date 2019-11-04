@@ -96,7 +96,7 @@ const kbdkeys = [
       type: 0,
       eventcode: 'Equal',
     }, {
-      name: 'Backspace',
+      name: ' ',
       primaryValue: ['Backspace', 'Backspace'],
       secondValue: ['Backspace', 'Backspace'],
       className: ['two', ''],
@@ -207,7 +207,7 @@ const kbdkeys = [
     primaryValue: ['Del', 'Del'],
     secondValue: ['Del', 'Del'],
     className: ['one', ''],
-    type: 0,
+    type: 1,
     eventcode: 'Delete',
   }],
   // rows 3
@@ -296,7 +296,7 @@ const kbdkeys = [
     type: 0,
     eventcode: 'Quote',
   }, {
-    name: 'Enter',
+    name: ' ',
     primaryValue: ['Enter', 'Enter'],
     secondValue: ['Enter', 'Enter'],
     className: ['two r', ''],

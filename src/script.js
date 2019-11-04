@@ -1,8 +1,9 @@
+/* eslint-disable func-names */
 /* eslint-disable no-unused-vars */
 import './main.css';
 import kbdkeys from './keys';
 
-global.console.log(kbdkeys);
+// global.console.log(kbdkeys);
 
 const createEl = (tag, cls, addTo, tagvalue) => {
   const el = document.createElement(tag);
@@ -29,6 +30,11 @@ const init = () => {
     const sectionRow = createEl('section', 'key-row', kbdContainer, null);
     row.forEach((keyItem) => {
       const keyDiv = createEl('div', `key ${keyItem.className[0]}`, sectionRow, keyItem.name);
+      keyDiv.addEventListener('click', (event) => {
+        if (keyItem.type === 0) {
+          textArea.innerHTML += keyItem.name;
+        }
+      });
     });
   });
 };
