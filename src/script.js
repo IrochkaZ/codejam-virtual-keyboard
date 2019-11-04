@@ -48,36 +48,23 @@ const init = () => {
     row.forEach((keyItem) => {
       const keyDiv = createEl('div', `key ${keyItem.className[0]}`, sectionRow, keyItem.name);
       keyDiv.setAttribute('data-event', `${keyItem.eventcode}`);
-
-      keyDiv.addEventListener('mousedown', (event) => {
-        event.preventDefault();
-        if (keyItem.type === 0 && document.querySelector(`div[data-event=${keyItem.eventcode}]`)) {
-          if (states.current !== null) {
-            states.current.classList.remove('active');
-            states.current = null;
-          }
-          keyDiv.classList.add('active');
-          states.current = keyDiv;
-          textArea.innerHTML += keyItem.name;
-        }
-      });
-
-      keyDiv.addEventListener('mouseup', (event) => {
-        event.preventDefault();
-        if (keyItem.type === 0 && document.querySelector(`div[data-event=${keyItem.eventcode}]`)) {
-          if (states.current !== null) {
-            states.current.classList.remove('active');
-            states.current = null;
-          }
-        }
-      });
     });
   });
 
-  window.addEventListener('keydown', (event) => {
+  const onDownListener = (event) => {
     event.preventDefault();
-    global.console.log(event);
-    const someKey = document.querySelector(`div[data-event=${event.code}]`);
+    let someKey;
+    let setValue;
+    if (event.code) {
+      someKey = document.querySelector(`div[data-event=${event.code}]`);
+      setValue = event.key;
+    }
+    // global.console.log(event.code === undefined);
+    if (event.code === undefined && event.target.hasAttribute('data-event')) {
+      someKey = event.target;
+      setValue = someKey.innerText;
+    }
+
     if (someKey) {
       if (states.current !== null) {
         states.current.classList.remove('active');
@@ -85,17 +72,23 @@ const init = () => {
       }
       someKey.classList.add('active');
       states.current = someKey;
-      textArea.innerHTML += event.key;
+      textArea.value += setValue;
+      textArea.focus();
     }
-  });
+  };
 
-  window.addEventListener('keyup', (event) => {
+  const onUpListener = (event) => {
     event.preventDefault();
     if (states.current !== null) {
       states.current.classList.remove('active');
       states.current = null;
     }
-  });
+  };
+
+  document.addEventListener('mousedown', onDownListener);
+  document.addEventListener('mouseup', onUpListener);
+  document.addEventListener('keydown', onDownListener);
+  document.addEventListener('keyup', onUpListener);
 };
 
 init();

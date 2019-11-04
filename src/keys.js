@@ -213,8 +213,8 @@ const kbdkeys = [
   // rows 3
   [{
     name: 'CapsLock',
-    primaryValue: ['Caps', 'Caps'],
-    secondValue: ['Caps', 'Caps'],
+    primaryValue: ['CapsLock', 'CapsLock'],
+    secondValue: ['CapsLock', 'CapsLock'],
     className: ['one-one-half l', ''],
     type: 1,
     eventcode: 'CapsLock',
