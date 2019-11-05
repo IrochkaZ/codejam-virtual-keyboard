@@ -132,7 +132,7 @@ const init = () => {
           }
         }
 
-        if (setValue === ' ') { // Space
+        if (setValue === ' ' || setValue === '') { // Space
           textArea.value += ' '.repeat(1);
         }
       }
