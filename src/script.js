@@ -20,6 +20,7 @@ const states = {
   arrowleft: false,
   arrowRight: false,
   current: null,
+  position: null,
 };
 
 const createEl = (tag, cls, addTo, tagvalue) => {
@@ -48,6 +49,7 @@ const init = () => {
     row.forEach((keyItem) => {
       const keyDiv = createEl('div', `key ${keyItem.className[0]}`, sectionRow, keyItem.name);
       keyDiv.setAttribute('data-event', `${keyItem.eventcode}`);
+      keyDiv.setAttribute('data-type', `${keyItem.type}`);
     });
   });
 
@@ -59,8 +61,8 @@ const init = () => {
       someKey = document.querySelector(`div[data-event=${event.code}]`);
       setValue = event.key;
     }
-    // global.console.log(event.code === undefined);
-    if (event.code === undefined && event.target.hasAttribute('data-event')) {
+
+    if (event.target.hasAttribute('data-event')) {
       someKey = event.target;
       setValue = someKey.innerText;
     }
@@ -72,8 +74,68 @@ const init = () => {
       }
       someKey.classList.add('active');
       states.current = someKey;
-      textArea.value += setValue;
-      textArea.focus();
+      if (parseInt(someKey.getAttribute('data-type'), 10) <= 1) {
+        if (states.position == null) {
+          textArea.value += setValue;
+          textArea.focus();
+        } else {
+          textArea.value = `${textArea.value.slice(0, states.position)}${setValue}${textArea.value.slice(states.position, textArea.textLength)}`;
+          states.position += 1;
+          textArea.setSelectionRange(states.position, states.position);
+        }
+      }
+
+      if (parseInt(someKey.getAttribute('data-type'), 10) === 2) {
+        if (setValue === 'Backspace') {
+          if (states.position !== null) {
+            textArea.value = `${textArea.value.slice(0, states.position - 1)}${textArea.value.slice(states.position, textArea.textLength)}`;
+            states.position -= 1;
+            textArea.setSelectionRange(states.position, states.position);
+          } else {
+            textArea.value = textArea.value.slice(0, -1);
+          }
+        }
+
+        if (setValue === 'Enter') {
+          textArea.value += '\n';
+        }
+
+        if (setValue === 'Tab') {
+          textArea.value += ' '.repeat(4);
+        }
+
+        if (setValue === 'ArrowLeft') {
+          if (states.position == null) {
+            states.position = textArea.textLength - 1;
+          } else {
+            states.position -= 1;
+          }
+          textArea.setSelectionRange(states.position, states.position);
+        }
+
+        if (setValue === 'ArrowRight') {
+          if (states.position !== null) {
+            if (states.position === textArea.textLength) {
+              states.position = null;
+              textArea.setSelectionRange(textArea.textLength, textArea.textLength);
+            } else {
+              states.position += 1;
+              textArea.setSelectionRange(states.position, states.position);
+            }
+          }
+        }
+
+        if (setValue === 'Delete') {
+          if (states.position !== null) {
+            textArea.value = `${textArea.value.slice(0, states.position)}${textArea.value.slice(states.position + 1, textArea.textLength)}`;
+            textArea.setSelectionRange(states.position, states.position);
+          }
+        }
+
+        if (setValue === ' ') { // Space
+          textArea.value += ' '.repeat(1);
+        }
+      }
     }
   };
 
