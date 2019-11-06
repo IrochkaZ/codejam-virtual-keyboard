@@ -60,11 +60,13 @@ const init = () => {
     if (event.code) {
       someKey = document.querySelector(`div[data-event=${event.code}]`);
       setValue = event.key;
+      // global.console.log(event);
     }
 
     if (event.target.hasAttribute('data-event')) {
       someKey = event.target;
       setValue = someKey.innerText;
+      // global.console.log(event);
     }
 
     if (someKey) {
@@ -135,12 +137,21 @@ const init = () => {
         if (setValue === ' ' || setValue === '') { // Space
           textArea.value += ' '.repeat(1);
         }
+
+        if (setValue === 'Shift') {
+          states.shiftLeft = true;
+          states.shiftRight = true;
+        }
       }
     }
   };
 
   const onUpListener = (event) => {
     event.preventDefault();
+    if (states.current.innerText === 'Shift' || states.current.innerText === 'CapsLock') {
+      return;
+    }
+
     if (states.current !== null) {
       states.current.classList.remove('active');
       states.current = null;
