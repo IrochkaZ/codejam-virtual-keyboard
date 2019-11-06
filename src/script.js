@@ -7,13 +7,13 @@ const states = {
   tab: false,
   capslock: false,
   enter: false,
-  shiftLeft: false,
-  shiftRight: false,
-  ctrlLeft: false,
-  ctrlRight: false,
-  altLeft: false,
-  altRight: false,
-  win: false,
+  ShiftLeft: false,
+  ShiftRight: false,
+  ControlLeft: false,
+  ControlRight: false,
+  AltLeft: false,
+  AltRight: false,
+  Win: false,
   space: false,
   arrowUp: false,
   arrowDown: false,
@@ -21,6 +21,7 @@ const states = {
   arrowRight: false,
   current: null,
   position: null,
+  language: 'en',
 };
 
 const createEl = (tag, cls, addTo, tagvalue) => {
@@ -34,6 +35,57 @@ const createEl = (tag, cls, addTo, tagvalue) => {
 
   addTo.append(el);
   return el;
+};
+
+const shiftState = () => {
+  const elems = document.querySelectorAll('div[data-type="0"]');
+  Object.values(elems).forEach((elem) => {
+    elem.classList.toggle('upperCase');
+  });
+
+  if (states.language === 'en') {
+    if ((states.ShiftLeft === true || states.ShiftRight === true)) {
+      kbdkeys.forEach((row) => {
+        row.forEach((item) => {
+          if (item.type === 1 && item.secondValue !== null) {
+            const secenval = item.secondValue[0];
+            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secenval;
+          }
+        });
+      });
+    } else {
+      kbdkeys.forEach((row) => {
+        row.forEach((item) => {
+          if (item.type === 1 && item.primaryValue !== null) {
+            const secenval = item.primaryValue[0];
+            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secenval;
+          }
+        });
+      });
+    }
+  }
+
+  if (states.language === 'ru') {
+    if ((states.ShiftLeft === true || states.ShiftRight === true)) {
+      kbdkeys.forEach((row) => {
+        row.forEach((item) => {
+          if (item.type === 1 && item.secondValue !== null) {
+            const secruval = item.secondValue[1];
+            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secruval;
+          }
+        });
+      });
+    } else {
+      kbdkeys.forEach((row) => {
+        row.forEach((item) => {
+          if (item.type === 1 && item.primaryValue != null) {
+            const secruval = item.primaryValue[1];
+            document.querySelector(`div[data-event="${item.eventCode}"]`).innerText = secruval;
+          }
+        });
+      });
+    }
+  }
 };
 
 const init = () => {
@@ -60,16 +112,38 @@ const init = () => {
     if (event.code) {
       someKey = document.querySelector(`div[data-event=${event.code}]`);
       setValue = event.key;
-      // global.console.log(event);
     }
 
     if (event.target.hasAttribute('data-event')) {
       someKey = event.target;
       setValue = someKey.innerText;
-      // global.console.log(event);
     }
 
     if (someKey) {
+      if (someKey.getAttribute('data-event') === 'ShiftLeft'
+        || someKey.getAttribute('data-event') === 'ShiftRight'
+        || someKey.getAttribute('data-event') === 'ControlLeft'
+        || someKey.getAttribute('data-event') === 'ControlRight'
+        || someKey.getAttribute('data-event') === 'AltLeft'
+        || someKey.getAttribute('data-event') === 'AltRight') {
+        states.current = someKey;
+        const keyID = someKey.getAttribute('data-event');
+        if (states[keyID] === false) {
+          states[keyID] = true;
+          someKey.classList.add('edit');
+        } else {
+          states[keyID] = false;
+          someKey.classList.remove('edit');
+        }
+      } else {
+        if (states.current !== null) {
+          states.current.classList.remove('active');
+          states.current = null;
+        }
+        someKey.classList.add('active');
+        states.current = someKey;
+      }
+
       if (states.current !== null) {
         states.current.classList.remove('active');
         states.current = null;
@@ -137,10 +211,17 @@ const init = () => {
         if (setValue === ' ' || setValue === '') { // Space
           textArea.value += ' '.repeat(1);
         }
+      }
 
+      if (parseInt(someKey.getAttribute('data-type'), 10) === 3) {
         if (setValue === 'Shift') {
-          states.shiftLeft = true;
-          states.shiftRight = true;
+          shiftState();
+        }
+        if (setValue === 'Alt') {
+          global.console.log('alt');
+        }
+        if (setValue === 'Ctrl') {
+          global.console.log('ctrl');
         }
       }
     }
@@ -148,9 +229,6 @@ const init = () => {
 
   const onUpListener = (event) => {
     event.preventDefault();
-    if (states.current.innerText === 'Shift' || states.current.innerText === 'CapsLock') {
-      return;
-    }
 
     if (states.current !== null) {
       states.current.classList.remove('active');

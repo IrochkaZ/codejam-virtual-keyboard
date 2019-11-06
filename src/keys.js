@@ -76,7 +76,7 @@ const kbdkeys = [
   }, {
     name: '0',
     primaryValue: ['0', '0'],
-    secondValue: ['(', ')'],
+    secondValue: [')', ')'],
     className: ['one', ''],
     type: 1,
     eventcode: 'Digit0',
@@ -216,7 +216,7 @@ const kbdkeys = [
     primaryValue: ['CapsLock', 'CapsLock'],
     secondValue: ['CapsLock', 'CapsLock'],
     className: ['one-one-half l', ''],
-    type: 2,
+    type: 3,
     eventcode: 'CapsLock',
   }, {
     name: 'a',
@@ -306,10 +306,10 @@ const kbdkeys = [
   // rows 4
   [{
     name: 'Shift',
-    primaryValue: ['ShiftLeft', 'ShiftLeft'],
-    secondValue: ['ShiftLeft', 'ShiftLeft'],
+    primaryValue: ['Shift', 'Shift'],
+    secondValue: ['Shift', 'Shift'],
     className: ['two-two-half l', ''],
-    type: 2,
+    type: 3,
     eventcode: 'ShiftLeft',
   }, {
     name: 'z',
@@ -394,7 +394,7 @@ const kbdkeys = [
     primaryValue: ['Shift', 'Shift'],
     secondValue: ['Shift', 'Shift'],
     className: ['one', ''],
-    type: 2,
+    type: 3,
     eventcode: 'ShiftRight',
   },
   ],
@@ -404,14 +404,14 @@ const kbdkeys = [
     primaryValue: ['Ctrl', 'Ctrl'],
     secondValue: ['Ctrl', 'Ctrl'],
     className: ['two-two-half l', ''],
-    type: 2,
+    type: 3,
     eventcode: 'ControlLeft',
   }, {
     name: 'Win',
     primaryValue: ['Win', 'Win'],
     secondValue: ['Win', 'Win'],
     className: ['one', ''],
-    type: 2,
+    type: 3,
     eventcode: 'MetaLeft',
   },
   {
@@ -419,7 +419,7 @@ const kbdkeys = [
     primaryValue: ['Alt', 'Alt'],
     secondValue: ['Alt', 'Alt'],
     className: ['one', ''],
-    type: 2,
+    type: 3,
     eventcode: 'AltLeft',
   }, {
     name: '',
@@ -433,14 +433,14 @@ const kbdkeys = [
     primaryValue: ['Alt', 'Alt'],
     secondValue: ['Alt', 'Alt'],
     className: ['one', ''],
-    type: 2,
+    type: 3,
     eventcode: 'AltRight',
   }, {
     name: 'Ctrl',
     primaryValue: ['Ctrl', 'Ctrl'],
     secondValue: ['Ctrl', 'Ctrl'],
     className: ['one-one-half l', ''],
-    type: 2,
+    type: 3,
     eventcode: 'ControlRight',
   }, {
     name: 'Left',
