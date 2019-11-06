@@ -137,6 +137,11 @@ const init = () => {
     });
   });
 
+  if (localStorage.getItem('language')) {
+    states.language = localStorage.getItem('language');
+    changeLanguage();
+  }
+
   const onDownListener = (event) => {
     event.preventDefault();
     let someKey;
@@ -277,10 +282,21 @@ const init = () => {
     }
   };
 
+  const onUnloadListener = () => {
+    if (states.language === 'en') {
+      localStorage.setItem('language', 'ru');
+    }
+
+    if (states.language === 'ru') {
+      localStorage.setItem('language', 'en');
+    }
+  };
+
   document.addEventListener('mousedown', onDownListener);
   document.addEventListener('mouseup', onUpListener);
   document.addEventListener('keydown', onDownListener);
   document.addEventListener('keyup', onUpListener);
+  window.addEventListener('unload', onUnloadListener);
 };
 
 init();
