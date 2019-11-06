@@ -22,6 +22,7 @@ const states = {
   current: null,
   position: null,
   language: 'en',
+  langUpdate: false,
 };
 
 const createEl = (tag, cls, addTo, tagvalue) => {
@@ -80,11 +81,42 @@ const shiftState = () => {
         row.forEach((item) => {
           if (item.type === 1 && item.primaryValue != null) {
             const secruval = item.primaryValue[1];
-            document.querySelector(`div[data-event="${item.eventCode}"]`).innerText = secruval;
+            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secruval;
           }
         });
       });
     }
+  }
+};
+
+const changeLanguage = () => {
+  states.langUpdate = false;
+  if (states.language === 'en' && states.langUpdate === false) {
+    kbdkeys.forEach((row) => {
+      row.forEach((item) => {
+        if (item.type <= 1) {
+          const prruval = item.primaryValue[1];
+          // global.console.log(item.eventcode, prruval);
+          document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = prruval;
+        }
+      });
+    });
+    states.language = 'ru';
+    states.langUpdate = true;
+  }
+
+  if (states.language === 'ru' && states.langUpdate === false) {
+    kbdkeys.forEach((row) => {
+      row.forEach((item) => {
+        if (item.type <= 1) {
+          const prenval = item.primaryValue[0];
+          // global.console.log(item.eventcode, prenval);
+          document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = prenval;
+        }
+      });
+    });
+    states.language = 'en';
+    states.langUpdate = true;
   }
 };
 
@@ -217,11 +249,20 @@ const init = () => {
         if (setValue === 'Shift') {
           shiftState();
         }
+
         if (setValue === 'Alt') {
-          global.console.log('alt');
-        }
-        if (setValue === 'Ctrl') {
-          global.console.log('ctrl');
+          if ((states.ControlLeft === true || states.ControlRight === true)
+            && (states.AltLeft === true || states.AltRight === true)) {
+            changeLanguage();
+            states.ControlLeft = false;
+            document.querySelector('div[data-event="ControlLeft"]').classList.remove('edit');
+            states.ControlRight = false;
+            document.querySelector('div[data-event="ControlRight"]').classList.remove('edit');
+            states.AltLeft = false;
+            document.querySelector('div[data-event="AltLeft"]').classList.remove('edit');
+            states.AltRight = false;
+            document.querySelector('div[data-event="AltRight"]').classList.remove('edit');
+          }
         }
       }
     }
