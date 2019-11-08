@@ -1,40 +1,19 @@
 /* eslint-disable no-unused-vars */
 import './main.css';
-import kbdkeys from './keys';
+import keybordKeys from './keys';
+import states from './states';
 
-const states = {
-  backspace: false,
-  tab: false,
-  capslock: false,
-  enter: false,
-  ShiftLeft: false,
-  ShiftRight: false,
-  ControlLeft: false,
-  ControlRight: false,
-  AltLeft: false,
-  AltRight: false,
-  Win: false,
-  space: false,
-  arrowUp: false,
-  arrowDown: false,
-  arrowleft: false,
-  arrowRight: false,
-  current: null,
-  position: null,
-  language: 'en',
-  langUpdate: false,
-};
 
-const createEl = (tag, cls, addTo, tagvalue) => {
+const createEl = (tag, className, parent, innerText = null) => {
   const el = document.createElement(tag);
-  if (cls != null) {
-    el.setAttribute('class', cls);
+  if (className) {
+    el.setAttribute('class', className);
   }
-  if (tagvalue != null) {
-    el.innerText = tagvalue;
+  if (innerText) {
+    el.innerText = innerText;
   }
 
-  addTo.append(el);
+  parent.append(el);
   return el;
 };
 
@@ -45,21 +24,21 @@ const shiftState = () => {
   });
 
   if (states.language === 'en') {
-    if ((states.ShiftLeft === true || states.ShiftRight === true)) {
-      kbdkeys.forEach((row) => {
-        row.forEach((item) => {
-          if (item.type === 1 && item.secondValue !== null) {
-            const secenval = item.secondValue[0];
-            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secenval;
+    if ((states.ShiftLeft || states.ShiftRight)) {
+      keybordKeys.forEach((row) => {
+        row.forEach(({ type, secondValue, eventcode }) => {
+          if (type === 1 && secondValue) {
+            const secondaryValue = secondValue[0];
+            document.querySelector(`div[data-event="${eventcode}"]`).innerText = secondaryValue;
           }
         });
       });
     } else {
-      kbdkeys.forEach((row) => {
-        row.forEach((item) => {
-          if (item.type === 1 && item.primaryValue !== null) {
-            const secenval = item.primaryValue[0];
-            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secenval;
+      keybordKeys.forEach((row) => {
+        row.forEach(({ type, primaryValue, eventcode }) => {
+          if (type === 1 && primaryValue) {
+            const secondaryValue = primaryValue[0];
+            document.querySelector(`div[data-event="${eventcode}"]`).innerText = secondaryValue;
           }
         });
       });
@@ -67,21 +46,21 @@ const shiftState = () => {
   }
 
   if (states.language === 'ru') {
-    if ((states.ShiftLeft === true || states.ShiftRight === true)) {
-      kbdkeys.forEach((row) => {
-        row.forEach((item) => {
-          if (item.type === 1 && item.secondValue !== null) {
-            const secruval = item.secondValue[1];
-            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secruval;
+    if ((states.ShiftLeft || states.ShiftRight)) {
+      keybordKeys.forEach((row) => {
+        row.forEach(({ type, secondValue, eventcode }) => {
+          if (type === 1 && secondValue) {
+            const secruval = secondValue[1];
+            document.querySelector(`div[data-event="${eventcode}"]`).innerText = secruval;
           }
         });
       });
     } else {
-      kbdkeys.forEach((row) => {
-        row.forEach((item) => {
-          if (item.type === 1 && item.primaryValue != null) {
-            const secruval = item.primaryValue[1];
-            document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = secruval;
+      keybordKeys.forEach((row) => {
+        row.forEach(({ type, primaryValue, eventcode }) => {
+          if (type === 1 && primaryValue) {
+            const secruval = primaryValue[1];
+            document.querySelector(`div[data-event="${eventcode}"]`).innerText = secruval;
           }
         });
       });
@@ -91,12 +70,12 @@ const shiftState = () => {
 
 const changeLanguage = () => {
   states.langUpdate = false;
-  if (states.language === 'en' && states.langUpdate === false) {
-    kbdkeys.forEach((row) => {
+  if (states.language === 'en' && !states.langUpdate) {
+    keybordKeys.forEach((row) => {
       row.forEach((item) => {
         if (item.type <= 1) {
           const prruval = item.primaryValue[1];
-          // global.console.log(item.eventcode, prruval);
+          global.console.log(item.eventcode, prruval);
           document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = prruval;
         }
       });
@@ -105,13 +84,12 @@ const changeLanguage = () => {
     states.langUpdate = true;
   }
 
-  if (states.language === 'ru' && states.langUpdate === false) {
-    kbdkeys.forEach((row) => {
-      row.forEach((item) => {
-        if (item.type <= 1) {
-          const prenval = item.primaryValue[0];
-          // global.console.log(item.eventcode, prenval);
-          document.querySelector(`div[data-event="${item.eventcode}"]`).innerText = prenval;
+  if (states.language === 'ru' && !states.langUpdate) {
+    keybordKeys.forEach((row) => {
+      row.forEach(({ type, primaryValue, eventcode }) => {
+        if (type <= 1) {
+          const prenval = primaryValue[0];
+          document.querySelector(`div[data-event="${eventcode}"]`).innerText = prenval;
         }
       });
     });
@@ -122,14 +100,14 @@ const changeLanguage = () => {
 
 const init = () => {
   const body = document.querySelector('body');
-  const root = createEl('div', 'root', body, null);
-  const wrapper = createEl('div', 'wrapper', root, null);
+  const root = createEl('div', 'root', body);
+  const wrapper = createEl('div', 'wrapper', root);
   createEl('h1', null, wrapper, 'Virtual keyboard');
-  const textArea = createEl('textarea', null, wrapper, null);
-  const kbdContainer = createEl('div', 'keyboard', wrapper, null);
+  const textArea = createEl('textarea', null, wrapper);
+  const kbdContainer = createEl('div', 'keyboard', wrapper);
 
-  kbdkeys.forEach((row) => {
-    const sectionRow = createEl('section', 'key-row', kbdContainer, null);
+  keybordKeys.forEach((row) => {
+    const sectionRow = createEl('section', 'key-row', kbdContainer);
     row.forEach((keyItem) => {
       const keyDiv = createEl('div', `key ${keyItem.className[0]}`, sectionRow, keyItem.name);
       keyDiv.setAttribute('data-event', `${keyItem.eventcode}`);
@@ -165,7 +143,7 @@ const init = () => {
         || someKey.getAttribute('data-event') === 'AltRight') {
         states.current = someKey;
         const keyID = someKey.getAttribute('data-event');
-        if (states[keyID] === false) {
+        if (!states[keyID]) {
           states[keyID] = true;
           someKey.classList.add('edit');
         } else {
@@ -173,7 +151,7 @@ const init = () => {
           someKey.classList.remove('edit');
         }
       } else {
-        if (states.current !== null) {
+        if (states.current) {
           states.current.classList.remove('active');
           states.current = null;
         }
@@ -181,7 +159,7 @@ const init = () => {
         states.current = someKey;
       }
 
-      if (states.current !== null) {
+      if (states.current) {
         states.current.classList.remove('active');
         states.current = null;
       }
@@ -200,7 +178,7 @@ const init = () => {
 
       if (parseInt(someKey.getAttribute('data-type'), 10) === 2) {
         if (setValue === 'Backspace') {
-          if (states.position !== null) {
+          if (states.position) {
             textArea.value = `${textArea.value.slice(0, states.position - 1)}${textArea.value.slice(states.position, textArea.textLength)}`;
             states.position -= 1;
             textArea.setSelectionRange(states.position, states.position);
@@ -227,7 +205,7 @@ const init = () => {
         }
 
         if (setValue === 'ArrowRight') {
-          if (states.position !== null) {
+          if (states.position) {
             if (states.position === textArea.textLength) {
               states.position = null;
               textArea.setSelectionRange(textArea.textLength, textArea.textLength);
@@ -239,7 +217,7 @@ const init = () => {
         }
 
         if (setValue === 'Delete') {
-          if (states.position !== null) {
+          if (states.position) {
             textArea.value = `${textArea.value.slice(0, states.position)}${textArea.value.slice(states.position + 1, textArea.textLength)}`;
             textArea.setSelectionRange(states.position, states.position);
           }
@@ -276,21 +254,13 @@ const init = () => {
   const onUpListener = (event) => {
     event.preventDefault();
 
-    if (states.current !== null) {
+    if (states.current) {
       states.current.classList.remove('active');
       states.current = null;
     }
   };
 
-  const onUnloadListener = () => {
-    if (states.language === 'en') {
-      localStorage.setItem('language', 'ru');
-    }
-
-    if (states.language === 'ru') {
-      localStorage.setItem('language', 'en');
-    }
-  };
+  const onUnloadListener = () => ((states.language === 'en') ? localStorage.setItem('language', 'ru') : localStorage.setItem('language', 'en'));
 
   document.addEventListener('mousedown', onDownListener);
   document.addEventListener('mouseup', onUpListener);

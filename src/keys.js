@@ -1,4 +1,4 @@
-const kbdkeys = [
+const keybordKeys = [
   // row1
   [{
     name: '~',
@@ -467,4 +467,4 @@ const kbdkeys = [
   ],
 ];
 
-export default kbdkeys;
+export default keybordKeys;
